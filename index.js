@@ -13,3 +13,7 @@ app.listen(3000, () => console.log('listening at 3000'));
 
 //the server that you created "serves" your url. it serves the people wanting to visit
 //your url
+
+//create a folder called public. This folder will house all documents
+//that the url will request
+app.use(express.static('public'));
