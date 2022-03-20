@@ -1,8 +1,11 @@
 //take the node package stuff and save it to this variable called express
 const express = require('express');
+
 //you are creating an app and calling it "express"
 const app = express();
+
 //the app will listen for requests. you specify a port that it lives at.
+//the server on your computer that runs locally at port 3000
 app.listen(3000, () => console.log('listening at 3000'));
 
 //at this point, you have successfully created a server that is listening for requests
