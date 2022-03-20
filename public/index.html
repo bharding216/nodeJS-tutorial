@@ -1,64 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- geolocation javascript code for identifying the clients location
-the if else statement is used because not all clients support geolocation
-it gives you a way out of the code-->
-<script>
-    if ('geolocation' in navigator) {
-        console.log('geolocation available');
-        navigator.geolocation.getCurrentPosition(function(position) {
-            const lat = position.coords.latitude;
-            const long = position.coords.longitude;
-            document.getElementById('latitude').textContent = lat;
-            document.getElementById('longitude').textContent = long;
-            
-            //console.log(position.coords.latitude);
-            //console.log(position.coords.longitude);
+        <!-- CSS and javascript for the leaflet map feature-->
+        <link 
+            rel="stylesheet" 
+            href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+            integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+            crossorigin=""
+        />
 
-        });
+        <script 
+            src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+            crossorigin="">
+        </script>
         
-    } else { 
-        console.log('geolocation not available');
-    }
+        <style>
+            #mymap { 
+                height: 500px; 
+                width: 500px;
+            }
+        </style>
 
-</script>
+        <title>Document</title>
+    </head>
 
-    <h1>
-        Data Selfie App
-    </h1>
-    
-<!-- div is how you create a section. This creates 2 links
-the hello link shows the word hello, the goodbye link shows the word goodbye-->
-<!-- remember that href stands for hypertext reference
+    <body>
 
-the format for a url is <a href = "url"> title </a>-->
-    <div>
-        <a href="/">hello</a> | <a href="goodbye.html">goodbye</a>
-    </div>
+        <h1>Data Selfie App</h1>
 
-    <!-- this is the text that appears when this file is run-->
-    <p>
-        Hello! You are here:<br />
+
+        <!-- div is how you create a section. This creates 2 links
+        the hello link shows the word hello, the goodbye link shows the word goodbye-->
+        <!-- remember that href stands for hypertext reference
+
+        the format for a url is <a href = "url"> title </a>-->
+        <div>
+            <a href="/">hello</a> | <a href="goodbye.html">goodbye</a>
+        </div>
+
+        <!-- this is the text that appears when this file is run-->
+        <p>
+            Hello! You are here:<br />
+            <br />
+            <!-- span is used to create another container
+            think of it as smaller than a div tag-->
+            latitude: <span id="latitude"></span>&deg;<br />
+            longitude: <span id="longitude"></span>&deg;
+
+        </p>
+
+
+        <div id="mymap"></div>
         <br />
-        <!-- span is used to create another container
-        think of it as smaller than a div tag-->
-        latitude: <span id="latitude"></span>&deg;<br />
-        longitude: <span id="longitude"></span>&deg;
+        <!-- geolocation javascript code for identifying the clients location
+        the if else statement is used because not all clients support geolocation
+        it gives you a way out of the code-->
+        <script>
+            if ('geolocation' in navigator) {
+                console.log('geolocation available');
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+                    console.log(lat, lon);
+                    document.getElementById('latitude').textContent = lat;
+                    document.getElementById('longitude').textContent = lon;
+                    
+                    const mymap = L.map('mymap').setView([lat, lon], 15);
+                    const attribution = 
+                        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+                    const tileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+                    const tiles = L.tileLayer(tileUrl, { attribution });
+                    tiles.addTo(mymap)
+                    const marker = L.marker([lat, lon]).addTo(mymap);
 
-    </p>
+                });
+                
+            } else { 
+                console.log('geolocation not available');
+            }
 
-    <div>
-        <img src="hello.png" alt="Hello!" width="385" height="385">
+        </script>
 
-    </div>
+        <div>
+            <img src="hello.png" alt="Hello!" width="385" height="385">
+        </div>
 
-</body>
+    </body>
+
 </html>
