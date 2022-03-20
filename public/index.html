@@ -43,6 +43,8 @@
             <a href="/">hello</a> | <a href="goodbye.html">goodbye</a>
         </div>
 
+        <button id="geolocate">Show My Location</button>
+
         <!-- this is the text that appears when this file is run-->
         <p>
             Hello! You are here:<br />
@@ -61,29 +63,30 @@
         the if else statement is used because not all clients support geolocation
         it gives you a way out of the code-->
         <script>
-            if ('geolocation' in navigator) {
-                console.log('geolocation available');
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    const lat = position.coords.latitude;
-                    const lon = position.coords.longitude;
-                    console.log(lat, lon);
-                    document.getElementById('latitude').textContent = lat;
-                    document.getElementById('longitude').textContent = lon;
+            document.getElementById('geolocate').addEventListener('click', event => {
+                if ('geolocation' in navigator) {
+                    console.log('geolocation available');
+                    navigator.geolocation.getCurrentPosition(function(position) {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+                        console.log(lat, lon);
+                        document.getElementById('latitude').textContent = lat;
+                        document.getElementById('longitude').textContent = lon;
+                        
+                        const mymap = L.map('mymap').setView([lat, lon], 15);
+                        const attribution = 
+                            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+                        const tileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+                        const tiles = L.tileLayer(tileUrl, { attribution });
+                        tiles.addTo(mymap)
+                        const marker = L.marker([lat, lon]).addTo(mymap);
+
+                    });
                     
-                    const mymap = L.map('mymap').setView([lat, lon], 15);
-                    const attribution = 
-                        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
-                    const tileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-                    const tiles = L.tileLayer(tileUrl, { attribution });
-                    tiles.addTo(mymap)
-                    const marker = L.marker([lat, lon]).addTo(mymap);
-
-                });
-                
-            } else { 
-                console.log('geolocation not available');
-            }
-
+                } else { 
+                    console.log('geolocation not available');
+                }
+            });
         </script>
 
         <div>
