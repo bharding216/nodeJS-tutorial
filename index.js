@@ -20,3 +20,19 @@ app.listen(3000, () => console.log('listening at 3000'));
 //create a folder called public. This folder will house all documents
 //that the url will request
 app.use(express.static('public'));
+app.use(express.json({limit: '1mb'}));
+//post routing method. Youre setting up where you want to receive the post
+//youre setting up an API for clients to send data to you
+
+//the function has two aurguments (request and repsonse). Request is all the stuff
+//going from the client to the server, response is anything sent from the server to the client.
+app.post('/api', (request, response) => {
+    console.log(request.body);
+    const data = request.body;
+    response.json({
+        status: 'success',
+        //here you create lat and lon within the variable called "data"
+        latitude: data.lat,
+        longitude: data.lon,
+    });
+});
