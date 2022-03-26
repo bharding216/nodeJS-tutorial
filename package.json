@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/bharding216/selfie#readme",
   "dependencies": {
-    "express": "^4.17.3"
+    "express": "^4.17.3",
+    "nedb": "^1.8.0"
   }
 }

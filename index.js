@@ -1,5 +1,6 @@
 //take the node package stuff and save it to this variable called express
 const express = require('express');
+const Datastore = require('nedb');
 
 //you are creating an app and calling it "express"
 const app = express();
@@ -24,13 +25,25 @@ app.use(express.json({limit: '1mb'}));
 //post routing method. Youre setting up where you want to receive the post
 //youre setting up an API for clients to send data to you
 
+//here you are creating the database and saving it locally on your laptop
+//you are creating a Datastore function
+const database = new Datastore('database.db');
+database.loadDatabase();
+
+
 //the function has two aurguments (request and repsonse). Request is all the stuff
 //going from the client to the server, response is anything sent from the server to the client.
 app.post('/api', (request, response) => {
     console.log(request.body);
     const data = request.body;
+    const timestamp = Date.now();
+    data.timestamp = timestamp 
+
+    database.insert(data);
+
     response.json({
         status: 'success',
+        timestamp: timestamp,
         //here you create lat and lon within the variable called "data"
         latitude: data.lat,
         longitude: data.lon,
