@@ -1,111 +1,61 @@
 <!DOCTYPE html>
-<!-- this is a test-->
-
+<!-- this is a submit button test-->
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-        <!-- CSS and javascript for the leaflet map feature-->
-        <link 
-            rel="stylesheet" 
-            href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-            integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
-            crossorigin=""
-        />
-
-        <script 
-            src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
-            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-            crossorigin="">
-        </script>
-        
-        <style>
-            #mymap { 
-                height: 500px; 
-                width: 500px;
-            }
-        </style>
-
         <title>Document</title>
     </head>
 
     <body>
-
-        <h1>Data Selfie App</h1>
-
-        <!-- div is how you create a section. This creates 2 links
-        the hello link shows the word hello, the goodbye link shows the word goodbye-->
-        <!-- remember that href stands for hypertext reference
-
-        the format for a url is <a href = "url"> title </a>-->
-        <div>
-            <a href="/">hello</a> | <a href="goodbye.html">goodbye</a>
-        </div>
-
-        <button id="geolocate">Show My Location</button>
-
-        <!-- this is the text that appears when this file is run-->
+        <h1>Location Web App</h1>
         <p>
-            Hello! You are here:<br />
+            You are here:<br />
             <br />
-            <!-- span is used to create another container
-            think of it as smaller than a div tag-->
             latitude: <span id="latitude"></span>&deg;<br />
             longitude: <span id="longitude"></span>&deg;
         </p>
 
-        <div id="mymap"></div>
-        <br />
+        <label for="vegatable"> Enter your favorite vegetable</label>
+        <br>
+        <input type="text" id="vegetable" value="Enter vegatable here" />
+        <button id="submit">Submit</button>
+
         <!-- geolocation javascript code for identifying the clients location
         the if else statement is used because not all clients support geolocation
         it gives you a way out of the code-->
 
         <script>
-            document.getElementById('geolocate').addEventListener('click', event => {
-                if ('geolocation' in navigator) {
-                    console.log('geolocation available');
-                    navigator.geolocation.getCurrentPosition(async position => {
-                        const lat = position.coords.latitude;
-                        const lon = position.coords.longitude;
-                        console.log(lat, lon);
-                        document.getElementById('latitude').textContent = lat;
-                        document.getElementById('longitude').textContent = lon;
-                        
-                        //this is how you push/post data to the server
-                        //first youre packaging the javascript data as an object
-                        //youre sending the data as JSON
-                        //youre posting data to the API
-                        const data = { lat, lon };
-                        const options = {
-                            method: 'POST',
-                            headers: {
-                                'Content-type': 'application/json'
-                            },
-                            body: JSON.stringify(data)
-                        }
-                        //fetch is used to post to the server.
-                        //fetch also returns a promise to the client.
-                        const response = await fetch('/api', options);
-                        const json = await response.json; 
-                        console.log(json);
-
-                        const mymap = L.map('mymap').setView([lat, lon], 15);
-                        const attribution = 
-                            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
-                        const tileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-                        const tiles = L.tileLayer(tileUrl, { attribution });
-                        tiles.addTo(mymap)
-                        const marker = L.marker([lat, lon]).addTo(mymap);
-                    });
-                    } else {
-                    console.log('geolocation not available');
-                }  
-            })  
+            var lat; 
+            var lon;
+            const button = document.getElementById('submit');
+            button.addEventListener('click', async event => {
+                const vegetable = document.getElementById('vegetable').value;
+                const data = { lat, lon, vegetable };
+                const options = {
+                    method: 'POST',
+                    headers: {
+                        'Content-type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                }
+                const response = await fetch('/api', options);
+                const json = await response.json(); 
+                console.log(json);
+            })
+            
+            if ('geolocation' in navigator) {
+                console.log('geolocation available');
+                navigator.geolocation.getCurrentPosition(async position => {
+                    lat = position.coords.latitude;
+                    lon = position.coords.longitude;
+                    document.getElementById('latitude').textContent = lat;
+                    document.getElementById('longitude').textContent = lon;
+                });
+                } else {
+                console.log('geolocation not available');
+            };
         </script>
-        <div>
-            <img src="hello.png" alt="Hello!" width="385" height="385">
-        </div>
     </body>
 </html>
