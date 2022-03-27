@@ -30,6 +30,10 @@ app.use(express.json({limit: '1mb'}));
 const database = new Datastore('database.db');
 database.loadDatabase();
 
+app.get('/api', (request, response) => {
+    response.json({test: 123});
+});
+
 
 //the function has two aurguments (request and repsonse). Request is all the stuff
 //going from the client to the server, response is anything sent from the server to the client.
