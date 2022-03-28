@@ -31,7 +31,13 @@ const database = new Datastore('database.db');
 database.loadDatabase();
 
 app.get('/api', (request, response) => {
-    response.json({test: 123});
+    database.find({}, (err, data) => {
+        if (err) {
+            response.end();
+            return;
+        }
+        response.json(data);
+    });
 });
 
 
